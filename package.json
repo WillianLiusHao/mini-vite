@@ -1,0 +1,21 @@
+{
+  "name": "mini-vite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node src/server/index"
+  },
+  "devDependencies": {
+    "chokidar": "^3.5.3",
+    "crypto": "^1.0.1",
+    "esbuild": "^0.15.6",
+    "http": "^0.0.1-security",
+    "serve-handler": "^6.1.3",
+    "ws": "^8.8.1"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "vue": "^3.2.38"
+  }
+}
