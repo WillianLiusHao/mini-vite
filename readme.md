@@ -11,25 +11,26 @@
 ### 一、预构建
   - 目的：`兼容性`、`性能`、`缓存`
   - 主要流程
-    1. 在server启动成功之前进行依赖预构建。
-    2. 读取用户的package-lock.json，yarn.lock，pnpm-lock.yaml，生成depHash。
-    3. 读取上次文件缓存的预构建文件信息，如果有，则将获取到的hash和上一步的depHash进行比较，一样则返回，否则重新构建。没有缓存或设置force参数，则重新构建。
-    4. 利用esbuild，对项目文件进行扫描，获取到项目依赖。
-    5. 利用esbuild，将项目依赖的模块化方式转化成es module方式。
-    6. 将转换的模块存入cacheDir（默认是node_module/.vite)。
-    7. 前端请求资源时，判断请求资源是否为依赖（即bare import），如果是则替换为缓存文件路径，加载相应文件。
-    8. 启动服务后，每当引入新的依赖，则重新进行依赖构建。执行2，3，4，5过程。
+  
+   1. 在server启动成功之前进行依赖预构建。
+   2. 读取用户的package-lock.json，yarn.lock，pnpm-lock.yaml，生成depHash。
+   3. 读取上次文件缓存的预构建文件信息，如果有，则将获取到的hash和上一步的depHash进行比较，一样则返回，否则重新构建。没有缓存或设置force参数，则重新构建。
+   4. 利用esbuild，对项目文件进行扫描，获取到项目依赖。
+   5. 利用esbuild，将项目依赖的模块化方式转化成es module方式。
+   6. 将转换的模块存入cacheDir（默认是node_module/.vite)。
+   7. 前端请求资源时，判断请求资源是否为依赖（即bare import），如果是则替换为缓存文件路径，加载相应文件。
+   8. 启动服务后，每当引入新的依赖，则重新进行依赖构建。执行2，3，4，5过程。
 
   ```js
     启动服务，改写http linten 方法
               ↓    
-    `optimizeDeps`：预构建入口函数
+    optimizeDeps：预构建入口函数
               ↓
-    `discoverProjectDependencies`：寻找项目依赖
+    discoverProjectDependencies：寻找项目依赖
               ↓
-    `scanImport`：构建依赖项，返回deps和missing
+    scanImport：构建依赖项，返回deps和missing
               ↓
-    `runOptimizeDeps`：打包依赖项，输出缓存文件
+    runOptimizeDeps：打包依赖项，输出缓存文件
   ```
 
   - 重难点：
