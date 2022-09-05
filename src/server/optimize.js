@@ -96,7 +96,7 @@ async function optimizeDeps (config, force, asCommand, newDeps) {
 async function scanImports(config) {
   // const entries = [Path.resolve(process.cwd(), 'example/main.js')]
   const entries = [Path.resolve(process.cwd(), 'node_modules/vue/dist/vue.runtime.esm-browser.js')]
-  console.log('开始打包')
+  console.log('开始分析构建模块')
   // const plugin = esbuildScanPlugin(config, container, deps, missing, entries)
   await Promise.all(entries.map((entry) => build({
     absWorkingDir: process.cwd(),

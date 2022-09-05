@@ -26,11 +26,15 @@
               ↓    
     optimizeDeps：预构建入口函数
               ↓
-    discoverProjectDependencies：寻找项目依赖
+    cachedMetadata：判断缓存是否过期或更新了(未过期直接返回使用)
               ↓
-    scanImport：构建依赖项，返回deps和missing
+    discoverProjectDependencies：寻找项目依赖
+        → scanImport(构建依赖项，返回deps和missing)
+            → esbuildScanPlugin(！esbuild插件，通过对不同类型的文件进行处理，最后得出需构建的依赖项)
               ↓
     runOptimizeDeps：打包依赖项，输出缓存文件
+        → getProcessingDepsCacheDir(初始化依赖缓存文件夹)
+        → depsInfo(遍历 depsInfo 依赖信息，进行打包)
   ```
 
   - 重难点：
