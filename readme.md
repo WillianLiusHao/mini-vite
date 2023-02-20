@@ -2,7 +2,7 @@
 
 学习 vite 的运行机制，核心原理
 
-## 运行部分 serve
+## 本地开发 dev
 
 > 变化 v1.0 => v2.0
  - koa => http + connect
@@ -42,20 +42,30 @@
     - 插件管理容器：`PluginContainer`
     - 模块图：ModuleGraph
 
+![](https://images.vrm.cn/ox/2022/10/26/预构建.png)
 
 
 ### 二、请求拦截和改写
+  - hmrproxy
+    首次解析 .vue 文件时候，vite 会注入改类型请求，用于获取`服务端`写好的热更新相关js
+  - 裸模块处理
+    - 改写模块名,如 `vue => /@module/vue`
+    - 然后发起 `/@module/vue` 请求后就会去 `node_module` 中找相应模块
+    - 找模块下 `package.json` 的 `module` 字段得到真正源文件地址，引入
   - js
-    - 裸模块处理
-      - 改写模块名,如 `vue => /@module/vue`
-      - 然后发起 `/@module/vue` 请求后就会去 `node_module` 中找相应模块
-      - 找模块下 `package.json` 的 `module` 字段得到真正源文件地址，引入
     - 相对路径：统一改为相对项目根路径的地址
-  - vue(文件改写)
+  - vue：利用`@vue/compiler-sfc`对 vue 文件进行词法语法解析
     - template：生成render函数
     - script
     - style
-  - css
+
+裸模块解析插件：`es-module-lexer` `magic-string`
+
+```js
+.vue 文件的首次解析，是没有 type 参数的
+
+vite 会 做一次文件改写，将 template、script、style 三大模块 分成不同 type 的请求
+```
 
 ### 三、热更新
   - 服务端
@@ -70,4 +80,6 @@
     - 收到消息，确定变化类型，做出相应变化(利用vue 挂到全局的 `__VUE_HMR_RUNTIME__` 方法，可以reload 或者 rerender 组件)
 
 
-## 打包部分 build
+## 线上打包 build
+
+> rollup
